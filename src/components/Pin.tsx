@@ -9,7 +9,7 @@ interface PinProps {
     className?: string
 }
 
-const Pin: React.FC<PinProps> = ({pin: {id, title, body, image, user}, className}) => {
+const Pin: React.FC<PinProps> = ({pin: {id, body, image, user}, className}) => {
     const navigate = useNavigate();
 
     return (
@@ -19,11 +19,7 @@ const Pin: React.FC<PinProps> = ({pin: {id, title, body, image, user}, className
                 {image && <img className="rounded-lg w-full " src={image} alt="user-post"/>}
             </div>
 
-            <div className="capitalize font-bold text-xl">
-                {title}
-            </div>
-
-            <div className="flex gap-2 mt-2 ">
+            <div className="flex gap-2 mt-2 ml-1 mr-1">
                 {body}
             </div>
 
@@ -35,6 +31,21 @@ const Pin: React.FC<PinProps> = ({pin: {id, title, body, image, user}, className
                 />
                 <p className="font-medium capitalize text-slate-500">{user.username}</p>
             </Link>
+
+            <button type="button"
+                    className="group mt-3 relative w-full flex justify-center
+                    py-2 px-4 border border-transparent
+                    text-sm text-black font-medium rounded-md text-black
+                    bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Edit
+            </button>
+            <button type="button"
+                    className="group mt-2 relative w-full flex justify-center
+                    py-2 px-4 border border-transparent
+                    text-sm text-black font-medium rounded-md text-black
+                    bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                Comment
+            </button>
         </div>
     );
 };

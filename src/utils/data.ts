@@ -86,7 +86,6 @@ export const defaultUser: User = {
 export const emptyPost: Post = {
     userId: "0",
     id: "0",
-    title: "no user",
     body: "empty",
     user: defaultUser
 };

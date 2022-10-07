@@ -20,6 +20,7 @@ module.exports = {
             },
             height: {
                 80: '80px',
+                200: '200px',
                 340: '340px',
                 370: '370px',
                 420: '420px',
@@ -37,6 +38,7 @@ module.exports = {
             },
             minWidth: {
                 210: '210px',
+                300: '300px',
                 350: '350px',
                 620: '620px',
             },

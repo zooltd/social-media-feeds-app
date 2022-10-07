@@ -8,7 +8,6 @@ export interface User {
 export interface Post {
     userId: string
     id: string
-    title: string
     body: string
     image?: string
     user: User
