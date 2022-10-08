@@ -14,16 +14,19 @@ const getPostImageUrl = (postId: number | string, width: number | string, height
     return `${IMAGE}/${postId}/${width}/${height}`;
 }
 
-const getUsersByUserIds = async (userIds: string[] | number[]): Promise<User[]> => {
+export const getUsersByUserIds = async (userIds: string[] | number[]): Promise<User[]> => {
     const userUrls = userIds.map(userId => `${USERS}?id=${userId}`);
-    const users = await Promise.all(userUrls.map(url => axios.get<User>(url).then(res => res.data)));
+    const users = await Promise.all(userUrls.map(url => axios.get<UserInfo>(url).then(res => res.data)));
 
-    const retUsers = users.flat();
-    retUsers.forEach(u => {
-        u.avatar = getUserImageUrl(u.id, 150);
-        u.status = "No Status";
-    });
-    return retUsers;
+    return users.flat().map(u => ({
+        id: u.id,
+        avatar: getUserImageUrl(u.id, 150),
+        username: u.username,
+        status: u.company.catchPhrase,
+        email: u.email,
+        phone: u.phone,
+        zipcode: u.address.zipcode
+    }));
 }
 
 export const getPostsByUserIds = async (userIds: string[] | number[]): Promise<Post[]> => {
@@ -68,7 +71,10 @@ export const authenticateUser = async (email: string, password: string): Promise
             id: returnUser.id,
             avatar: getUserImageUrl(returnUser.id, 150),
             username: returnUser.username,
-            status: "No Status"
+            status: returnUser.company.catchPhrase,
+            email: returnUser.email,
+            phone: returnUser.phone,
+            zipcode: returnUser.address.zipcode
         };
     } else {
         return null;
@@ -79,7 +85,10 @@ export const defaultUser: User = {
     id: "0",
     avatar: "https://ui-avatars.com/api/?name=?",
     username: "Unknown",
-    status: "No Status"
+    status: "No Status",
+    email: "",
+    phone: "",
+    zipcode: ""
 };
 
 

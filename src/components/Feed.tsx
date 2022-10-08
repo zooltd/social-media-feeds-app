@@ -5,6 +5,7 @@ import MasonryLayout from "./MasonryLayout";
 import {emptyPost, getFeedsByUser, getPostsByUserIds} from "../utils/data";
 import {Post, User} from "../constants/types";
 import {defaultUser} from "../utils/data";
+import CreatePin from "./CreatePin";
 
 interface FeedProps {
     user: User
@@ -30,6 +31,7 @@ const Feed: React.FC<FeedProps> = ({user}) => {
 
     return (
         <div>
+            <CreatePin/>
             {pins && <MasonryLayout pins={pins}/>}
         </div>
     );

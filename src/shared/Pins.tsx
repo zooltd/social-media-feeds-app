@@ -20,9 +20,13 @@ const Pins: React.FC<Pins> = ({user}) => {
                 <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} user={user}/>
             </div>
 
-            <CreatePin />
-
-            <Feed user={user}/>
+            <div className="h-full">
+                <Routes>
+                    <Route path="/" element={<Feed user={user}/>}/>
+                    <Route path="/pin-detail/:pinId" element={<PinDetail user={user}/>}/>
+                    <Route path="/search" element={<Search searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>}/>
+                </Routes>
+            </div>
 
         </div>
     );

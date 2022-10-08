@@ -3,6 +3,9 @@ export interface User {
     avatar: string
     username: string
     status: string
+    email: string
+    phone: string
+    zipcode: string
 }
 
 export interface Post {
