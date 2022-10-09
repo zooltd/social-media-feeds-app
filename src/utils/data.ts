@@ -37,8 +37,10 @@ export const getPostsByUserIds = async (userIds: string[] | number[]): Promise<P
     const userId2Username = new Map(users.map(user => [user.id, user]));
 
     const retPosts = posts.flat();
-    retPosts.forEach(p => {
-        if (Math.random() < 0.4) p.image = getPostImageUrl(p.id, 400, 250);
+    retPosts.forEach((p, i) => {
+        if ((i + 1) % 10 <= 3 || Math.random() < 0.5) {
+            p.image = getPostImageUrl(p.id, 400, 250);
+        }
         p.user = userId2Username.get(p.userId) ?? defaultUser;
     })
     return retPosts;

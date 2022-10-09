@@ -1,20 +1,17 @@
-import React, {useState} from 'react';
-import {Post, User} from "../constants/types";
-import {AiTwotoneDelete} from "react-icons/all";
-import {Link, useNavigate} from "react-router-dom";
-import {defaultUser} from "../utils/data";
+import React from 'react';
+import {Post} from "../constants/types";
+import {Link} from "react-router-dom";
 
 interface PinProps {
     pin: Post,
-    className?: string
+    isOwner?: boolean
 }
 
-const Pin: React.FC<PinProps> = ({pin: {id, body, image, user}, className}) => {
-    const navigate = useNavigate();
+const Pin: React.FC<PinProps> = ({pin: {id, body, image, user}, isOwner}) => {
 
     return (
-        <div className="m-2 shadow-md p-3">
-            <div onClick={() => navigate(`/pin-detail/${id}`)}
+        <div className="m-2 shadow-md p-3 rounded-md bg-white">
+            <div onClick={() => {}}
                  className=" relative cursor-zoom-in w-auto hover:shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out">
                 {image && <img className="rounded-lg w-full " src={image} alt="user-post"/>}
             </div>
@@ -32,20 +29,19 @@ const Pin: React.FC<PinProps> = ({pin: {id, body, image, user}, className}) => {
                 <p className="font-medium capitalize text-slate-500">{user.username}</p>
             </Link>
 
-            <button type="button"
-                    className="group mt-3 relative w-full flex justify-center
-                    py-2 px-4 border border-transparent
-                    text-sm text-black font-medium rounded-md text-black
-                    bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                Edit
-            </button>
-            <button type="button"
-                    className="group mt-2 relative w-full flex justify-center
-                    py-2 px-4 border border-transparent
-                    text-sm text-black font-medium rounded-md text-black
-                    bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                Comment
-            </button>
+            <div className="flex flex-col space-y-2 mt-2">
+                <button type="button"
+                        className="bg-cyan-700 text-white font-bold rounded-md mt-2 relative w-full flex justify-center py-2 px-4 hover:bg-cyan-300">
+                    Comment
+                </button>
+                {
+                    isOwner &&
+                    <button type="button"
+                            className="bg-pink-400 text-white font-bold rounded-md mt-2 relative w-full flex justify-center py-2 px-4 hover:bg-pink-300">
+                        Edit
+                    </button>
+                }
+            </div>
         </div>
     );
 };

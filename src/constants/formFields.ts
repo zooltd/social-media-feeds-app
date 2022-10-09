@@ -1,4 +1,4 @@
-const loginFields = [
+export const loginFields = [
     {
         labelText: "Email address",
         labelFor: "email",
@@ -21,7 +21,7 @@ const loginFields = [
     }
 ]
 
-const signupFields = [
+export const signupFields = [
     {
         labelText: "Username",
         labelFor: "username",
@@ -63,5 +63,3 @@ const signupFields = [
         placeholder: "Confirm Password"
     }
 ]
-
-export {loginFields, signupFields}

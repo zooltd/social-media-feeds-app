@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {loginFields} from "../constants/formFields";
-import FormAction from "./FormAction";
-import Input from "./Input";
-import {User} from "../constants/types";
+import FormEntry from "./FormEntry";
 import {authenticateUser} from "../utils/data";
 import {useNavigate} from "react-router-dom";
 
@@ -16,30 +14,18 @@ const LoginForm = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        authenticate();
-    }
-
-    const Signup = () => {
-
-    }
-
-    //Handle LoginForm API Integration here
-    const authenticate = async () => {
-        const res = await authenticateUser(loginState["email"], loginState["password"]);
-        if (res) {
+        authenticateUser(loginState["email"], loginState["password"]).then(res => res).then((res) => {
             localStorage.setItem('user', JSON.stringify(res));
-            navigate('/', { replace: true });
-        } else {
-
-        }
+            navigate('/', {replace: true});
+        });
     }
 
     return (
-        <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
+        <form className="mt-4 space-y-4 w-80" onSubmit={handleSubmit}>
             <div className="-space-y-px">
                 {
                     loginFields.map(field =>
-                        <Input
+                        <FormEntry
                             key={field.id}
                             handleChange={handleChange}
                             value={loginState[field.id]}
@@ -49,8 +35,7 @@ const LoginForm = () => {
                             name={field.name}
                             type={field.type}
                             isRequired={field.isRequired}
-                            placeholder={field.placeholder}
-                            customClass=""/>
+                            placeholder={field.placeholder}/>
                     )
                 }
             </div>
@@ -70,18 +55,12 @@ const LoginForm = () => {
 
             </div>
 
-            <div className="w-80"/>
-
-
-            <FormAction handleSubmit={handleSubmit} type='Button' action='submit' text="Login"/>
-            {/*<FormAction handleSubmit={Signup} type='Button' action='submit' text="Signup"/>*/}
-
-            <div className="mt-4 flex items-center justify-between">
-                <span className="border-b w-1/5 md:w-1/4"></span>
-                <a href="/signup" className="text-xs text-slate-50 uppercase">or sign up</a>
-                <span className="border-b w-1/5 md:w-1/4"></span>
-            </div>
-
+            <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm text-black font-medium rounded-md text-black bg-slate-50 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
+                onSubmit={handleSubmit}>
+                Login
+            </button>
         </form>
     )
 }

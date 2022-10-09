@@ -1,39 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import React from 'react';
 import Spinner from "./Spinner";
-import MasonryLayout from "./MasonryLayout";
-import {emptyPost, getFeedsByUser, getPostsByUserIds} from "../utils/data";
 import {Post, User} from "../constants/types";
-import {defaultUser} from "../utils/data";
 import CreatePin from "./CreatePin";
+import MasonryLayout from "./MasonryLayout";
 
 interface FeedProps {
     user: User
+    pins: Post[]
+    loading: boolean
 }
 
-const Feed: React.FC<FeedProps> = ({user}) => {
-    const [loading, setLoading] = useState(true);
-    const [pins, setPins] = useState<Post[]>([]);
-
-    useEffect(() => {
-        setLoading(true);
-        console.log("Feed")
-        if (user !== defaultUser) {
-            getFeedsByUser(user).then(posts => setPins(posts));
-        } else {
-            setPins([emptyPost]);
-        }
-        setLoading(false);
-    }, [user])
-
-    if (loading)
-        return <Spinner msg="loading"/>
-
+const Feed: React.FC<FeedProps> = ({user, pins, loading}) => {
     return (
-        <div>
-            <CreatePin/>
-            {pins && <MasonryLayout pins={pins}/>}
-        </div>
+        loading ? (
+            <Spinner msg="loading"/>
+        ) : (
+            <>
+                <CreatePin/>
+                <MasonryLayout pins={pins} user={user}/>
+            </>
+        )
     );
 };
 

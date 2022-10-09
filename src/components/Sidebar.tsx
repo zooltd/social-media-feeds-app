@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {User} from "../constants/types";
-import {NavLink, Link} from "react-router-dom";
-import {RiHomeFill} from "react-icons/ri";
-import {IoIosArrowForward} from "react-icons/io";
+import {Link} from "react-router-dom";
 
 import logo from "../assets/logo.color.svg"
-import {categories} from "../constants/categories";
 import {getFollowingUsers} from "../utils/data";
 import StatusCard from "./StatusCard";
+import Separator from "./Separator";
 
 interface SidebarProps {
     user: User,
@@ -24,73 +22,45 @@ const Sidebar: React.FC<SidebarProps> = ({user, closeToggle}) => {
         getFollowingUsers(user.id).then(users => setFollowingUsers(users));
     }, [user])
 
-    const isNotActiveStyle = 'flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize';
-    const isActiveStyle = 'flex items-center px-5 gap-3 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize';
-
     return (
-        <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-300 hide-scrollbar">
+        <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-275 hide-scrollbar">
             <div className="flex flex-col">
                 <Link
                     to="/"
-                    className="flex px-5 gap-2 my-6 pt-1 w-275 items-center"
+                    className="flex px-5 gap-2 my-6 pt-1 w-250 items-center"
                     onClick={handleCloseSidebar}
                 >
                     <img src={logo} alt="logo" className="w-full"/>
                 </Link>
 
-                {/*<div className="flex flex-col gap-5">*/}
-
-                {/*    <NavLink*/}
-                {/*        to="/"*/}
-                {/*        className={({isActive}) => (isActive ? isActiveStyle : isNotActiveStyle)}*/}
-                {/*        onClick={handleCloseSidebar}*/}
-                {/*    >*/}
-                {/*        <RiHomeFill/>*/}
-                {/*        Home*/}
-                {/*    </NavLink>*/}
-
-                {/*    <h3 className="mt-2 px-5 text-base 2xl:text-xl">Discover categories</h3>*/}
-                {/*    {categories.slice(0, categories.length - 1).map((category) => (*/}
-                {/*        <NavLink*/}
-                {/*            to={`/category/${category.name}`}*/}
-                {/*            className={({isActive}) => (isActive ? isActiveStyle : isNotActiveStyle)}*/}
-                {/*            onClick={handleCloseSidebar}*/}
-                {/*            key={category.name}*/}
-                {/*        >*/}
-                {/*            <img src={category.image} className="w-8 h-8 rounded-full shadow-sm"/>*/}
-                {/*            {category.name}*/}
-                {/*        </NavLink>*/}
-                {/*    ))}*/}
-                {/*</div>*/}
-
-
             </div>
-
 
             <div className="flex flex-col">
                 <StatusCard user={user} isOwner={true}/>
             </div>
 
-            <div className="flex flex-col space-y-5 mt-5">
-                {followingUsers.map(user => <StatusCard user={user}/>)}
+            <Separator msg="Followings"/>
+
+            <div className="flex flex-col space-y-5">
+                {
+                    followingUsers.map(user => <StatusCard user={user} key={user.id}/>)
+                }
             </div>
 
-            <div className="flex  justify-between">
-                <input/>
-                <button>Add</button>
+            <Separator msg="Add Followings"/>
+
+            <div
+                className="flex flex-row space-x-4 items-center w-60 mb-3 mx-3 p-3 bg-gray-100 rounded-lg shadow-lg"
+                onClick={handleCloseSidebar}>
+                <input className="rounded-md ring-1 outline-none ring-gray-300 focus:ring-2 focus:ring-pink-400
+                px-3 py-1 w-full" placeholder="username"/>
+                <button type="button"
+                        className="bg-pink-400 text-white font-bold p-1 rounded-full px-4 outline-none">
+                    Add
+                </button>
             </div>
 
-            {user && (
-                <Link
-                    to={`profile/${user.id}`}
-                    className="flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3"
-                    onClick={handleCloseSidebar}
-                >
-                    <img src={user.avatar} className="w-10 h-10 rounded-full" alt="profile"/>
-                    <p>{user.username}</p>
-                    <IoIosArrowForward/>
-                </Link>
-            )}
+            <br/>
         </div>
     );
 };

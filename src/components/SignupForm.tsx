@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {loginFields, signupFields} from "../constants/formFields"
-import FormAction from "./FormAction";
-import Input from "./Input";
+import {signupFields} from "../constants/formFields"
+import FormEntry from "./FormEntry";
 
 const SignupForm = () => {
     const [signupState, setSignupState] = useState(Object.fromEntries(signupFields.map(field => [field.id, ""])));
@@ -13,7 +12,6 @@ const SignupForm = () => {
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        console.log(signupState)
         createAccount()
     }
 
@@ -27,7 +25,7 @@ const SignupForm = () => {
             <div className="">
                 {
                     signupFields.map(field =>
-                        <Input
+                        <FormEntry
                             key={field.id}
                             handleChange={handleChange}
                             value={signupState[field.id]}
@@ -37,21 +35,18 @@ const SignupForm = () => {
                             name={field.name}
                             type={field.type}
                             isRequired={field.isRequired}
-                            placeholder={field.placeholder}
-                            customClass=""/>
+                            placeholder={field.placeholder}/>
                     )
                 }
 
                 <div className="w-80"/>
 
-                <FormAction handleSubmit={handleSubmit} text="Signup" action='submit' type='Button'/>
-
-                <div className="mt-4 flex items-center justify-between">
-                    <span className="border-b w-1/5 md:w-1/4"></span>
-                    <a href="/login" className="text-xs text-slate-50 uppercase">or login</a>
-                    <span className="border-b w-1/5 md:w-1/4"></span>
-                </div>
-
+                <button
+                    type="submit"
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm text-black font-medium rounded-md text-black bg-slate-50 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
+                    onSubmit={handleSubmit}>
+                    Sign Up
+                </button>
             </div>
 
 
