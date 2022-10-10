@@ -1,57 +1,67 @@
-import React, {useState} from 'react';
-import {signupFields} from "../constants/formFields"
-import FormEntry from "./FormEntry";
+import React, { useState } from 'react'
+import { signupFields } from '../constants/formFields'
+import FormEntry from './FormEntry'
+import { CreateUser } from '../utils/data'
+import { useNavigate } from 'react-router-dom'
+import Toast from './Toast'
 
-const SignupForm = () => {
-    const [signupState, setSignupState] = useState(Object.fromEntries(signupFields.map(field => [field.id, ""])));
+const SignupForm: React.FC = () => {
+  const [signupState, setSignupState] = useState(Object.fromEntries(signupFields.map(field => [field.id, ''])))
+  const navigate = useNavigate()
+  const [signupErr, setSignupErr] = useState('')
 
-    const handleChange = (e: { target: { id: any; value: any; }; }) => setSignupState({
-        ...signupState,
-        [e.target.id]: e.target.value
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => setSignupState({
+    ...signupState,
+    [e.target.id]: e.target.value
+  })
 
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-        createAccount()
+  const handleSubmit = (e: React.FormEvent): void => {
+    e.preventDefault()
+    setSignupErr('')
+    if (signupState.password !== signupState['confirm-password']) {
+      setSignupErr("Passwords Don't Match.")
+      return
     }
 
-    //handle SignupForm API Integration here
-    const createAccount = () => {
+    CreateUser(signupState.username, signupState.email).then(user => {
+      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem(user.id, JSON.stringify(user))
+      navigate('/', { replace: true })
+    }).catch(e => console.error(e.msg))
+  }
 
-    }
+  return (
+    <>
+      {(signupErr.length !== 0) ? <Toast msg={signupErr} type="danger" setErrorMsg={setSignupErr}/> : <></>}
+      <form className="mt-4 w-80" onSubmit={handleSubmit}>
+        <div className="flex flex-col space-y-4">
+          {
+            signupFields.map(field =>
+              <FormEntry
+                key={field.id}
+                handleChange={handleChange}
+                value={signupState[field.id]}
+                labelText={field.labelText}
+                labelFor={field.labelFor}
+                id={field.id}
+                name={field.name}
+                type={field.type}
+                isRequired={field.isRequired}
+                placeholder={field.placeholder}
+                showLabel={false}/>
+            )
+          }
+        </div>
 
-    return (
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="">
-                {
-                    signupFields.map(field =>
-                        <FormEntry
-                            key={field.id}
-                            handleChange={handleChange}
-                            value={signupState[field.id]}
-                            labelText={field.labelText}
-                            labelFor={field.labelFor}
-                            id={field.id}
-                            name={field.name}
-                            type={field.type}
-                            isRequired={field.isRequired}
-                            placeholder={field.placeholder}/>
-                    )
-                }
+        <button
+          type="submit"
+          className="mt-6 ring-1 focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 border-none w-full py-2 px-4 border border-transparent text-sm text-black font-medium rounded-md text-black bg-slate-50 hover:bg-slate-200"
+          onSubmit={handleSubmit}>
+          Sign Up
+        </button>
+      </form>
+    </>
+  )
+}
 
-                <div className="w-80"/>
-
-                <button
-                    type="submit"
-                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm text-black font-medium rounded-md text-black bg-slate-50 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mt-10"
-                    onSubmit={handleSubmit}>
-                    Sign Up
-                </button>
-            </div>
-
-
-        </form>
-    )
-};
-
-export default SignupForm;
+export default SignupForm

@@ -1,68 +1,85 @@
-import React, {useEffect, useState} from 'react';
-import {User} from "../constants/types";
-import {Link} from "react-router-dom";
+import React, { useState } from 'react'
+import { User } from '../constants/types'
+import { Link } from 'react-router-dom'
 
-import logo from "../assets/logo.color.svg"
-import {getFollowingUsers} from "../utils/data";
-import StatusCard from "./StatusCard";
-import Separator from "./Separator";
+import logo from '../assets/logo.color.svg'
+import { CreateUser } from '../utils/data'
+import Separator from './Separator'
+import InputEntry from './InputEntry'
+import StatusCard from './StatusCard'
 
 interface SidebarProps {
-    user: User,
-    closeToggle: React.Dispatch<React.SetStateAction<boolean>>
+  user: User
+  closeToggle: React.Dispatch<React.SetStateAction<boolean>>
+  followingUserIds: string[]
+  setFollowingUserIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const Sidebar: React.FC<SidebarProps> = ({user, closeToggle}) => {
-    const [followingUsers, setFollowingUsers] = useState<User[]>([]);
-    const handleCloseSidebar = () => {
-        closeToggle && closeToggle(false);
-    };
+const Sidebar: React.FC<SidebarProps> = ({ user, closeToggle, followingUserIds, setFollowingUserIds }) => {
+  const [username, setUsername] = useState('')
 
-    useEffect(() => {
-        getFollowingUsers(user.id).then(users => setFollowingUsers(users));
-    }, [user])
+  const handleCloseSidebar = (): void => {
+    closeToggle(false)
+  }
 
-    return (
-        <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-275 hide-scrollbar">
-            <div className="flex flex-col">
-                <Link
-                    to="/"
-                    className="flex px-5 gap-2 my-6 pt-1 w-250 items-center"
-                    onClick={handleCloseSidebar}
-                >
-                    <img src={logo} alt="logo" className="w-full"/>
-                </Link>
+  const addFollowing = (): void => {
+    setUsername('')
+    CreateUser(username, 'Unknown Email').then(user => {
+      setFollowingUserIds(prev => [user.id, ...prev])
+      localStorage.setItem(user.id, JSON.stringify(user))
+    }).catch(e => console.error(e.msg))
+  }
 
-            </div>
+  return (
+    <div
+      className="flex flex-col items-center  bg-white h-full overflow-y-scroll min-w-275 hide-scrollbar">
+      <div className="flex flex-col">
+        <Link
+          to="/"
+          className="flex px-5 gap-2 my-6 pt-1 w-250 items-center"
+          onClick={handleCloseSidebar}
+        >
+          <img src={logo} alt="logo" className="w-full"/>
+        </Link>
 
-            <div className="flex flex-col">
-                <StatusCard user={user} isOwner={true}/>
-            </div>
+      </div>
 
-            <Separator msg="Followings"/>
+      <div className="flex flex-col">
+        <StatusCard userId={user.id} key={user.id} setFollowingUserIds={setFollowingUserIds} isOwner={true}/>
+      </div>
 
-            <div className="flex flex-col space-y-5">
-                {
-                    followingUsers.map(user => <StatusCard user={user} key={user.id}/>)
-                }
-            </div>
+      <div className="w-4/5">
+        <Separator msg="Followings"/>
+      </div>
 
-            <Separator msg="Add Followings"/>
+      <div className="flex flex-col space-y-5">
+        {
+          followingUserIds.map(userId => <StatusCard userId={userId} key={userId}
+                                                     setFollowingUserIds={setFollowingUserIds} isOwner={false}/>)
+        }
+      </div>
 
-            <div
-                className="flex flex-row space-x-4 items-center w-60 mb-3 mx-3 p-3 bg-gray-100 rounded-lg shadow-lg"
-                onClick={handleCloseSidebar}>
-                <input className="rounded-md ring-1 outline-none ring-gray-300 focus:ring-2 focus:ring-pink-400
-                px-3 py-1 w-full" placeholder="username"/>
-                <button type="button"
-                        className="bg-pink-400 text-white font-bold p-1 rounded-full px-4 outline-none">
-                    Add
-                </button>
-            </div>
+      <div className="w-4/5">
+        <Separator msg="Add Followings"/>
+      </div>
 
-            <br/>
-        </div>
-    );
-};
+      <div
+        className="flex flex-row space-x-4 items-center w-60 mb-3 mx-3 p-3 bg-gray-100 rounded-lg shadow-lg"
+        onClick={handleCloseSidebar}>
 
-export default Sidebar;
+        <InputEntry type="text" placeholder="username" value={username}
+                    handleChange={e => setUsername(e.target.value)}/>
+
+        <button type="button"
+                className="bg-pink-400 text-white font-bold p-1 rounded-md px-4 py-2 outline-none"
+                onClick={() => addFollowing()}>
+          Add
+        </button>
+      </div>
+
+      <br/>
+    </div>
+  )
+}
+
+export default Sidebar

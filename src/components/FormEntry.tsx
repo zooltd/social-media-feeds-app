@@ -1,39 +1,42 @@
-import React from "react";
+import React from 'react'
+import InputEntry from './InputEntry'
 
 interface FormEntryProps {
-    handleChange: React.ChangeEventHandler<HTMLInputElement>;
-    value: string;
-    labelText: string;
-    labelFor: string;
-    id: string;
-    name: string;
-    type: string;
-    isRequired: boolean
-    placeholder: string
+  handleChange: React.ChangeEventHandler<HTMLInputElement>
+  labelText: string
+  labelFor: string
+  id: string
+  name: string
+  type: string
+  isRequired: boolean
+  placeholder: string
+  value: string
+  showLabel: boolean
+  pattern?: string
 }
 
 const FormEntry: React.FC<FormEntryProps> = ({
-                                         handleChange,
-                                         value,
-                                         labelText,
-                                         labelFor,
-                                         id,
-                                         name,
-                                         type,
-                                         isRequired = false,
-                                         placeholder,
-                                     }) => {
-    const fixedInputClass = "rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-
-    return (
-        <div className="my-5">
-            <label htmlFor={labelFor} className="sr-only">
-                {labelText}
-            </label>
-            <input onChange={handleChange} value={value} id={id} name={name} type={type} required={isRequired}
-                   className={fixedInputClass} placeholder={placeholder}/>
-        </div>
-    )
+  handleChange,
+  labelText,
+  labelFor,
+  id,
+  name,
+  type,
+  isRequired = false,
+  placeholder,
+  value,
+  showLabel,
+  pattern
+}) => {
+  return (
+    <div className="space-y-2">
+      <label htmlFor={labelFor} className={showLabel ? '' : 'sr-only'}>
+        {labelText}
+      </label>
+      <InputEntry handleChange={handleChange} placeholder={placeholder} type={type} id={id} name={name}
+                  required={isRequired} value={value} pattern={pattern}/>
+    </div>
+  )
 }
 
-export default FormEntry;
+export default FormEntry

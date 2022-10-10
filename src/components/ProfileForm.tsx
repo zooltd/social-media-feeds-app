@@ -1,59 +1,70 @@
-import React, {useRef} from 'react';
+import React, { useRef, useState } from 'react'
+import FormEntry from './FormEntry'
+import { profileFields } from '../constants/formFields'
+import { User } from '../constants/types'
 
-const ProfileForm = () => {
-    const formRef = useRef<HTMLFormElement>(null);
+interface ProfileFormProps {
+  setUser: React.Dispatch<React.SetStateAction<User>>
+}
 
-    return (
-        <form className="flex flex-col space-y-4" ref={formRef}>
-            <div>
-                <label className="text-sm">Your Name</label>
-                <input type="text" placeholder="Your name"
-                       className="ring-1 ring-gray-300 w-full rounded-md px-4 py-2 mt-2 outline-none
-                                               focus:ring-2 focus:ring-teal-300">
-                </input>
-            </div>
-            <div>
-                <label className="text-sm">Email Address</label>
-                <input type="email" placeholder="Email Address"
-                       className="ring-1 ring-gray-300 w-full rounded-md px-4 py-2 mt-2 outline-none
-                                               focus:ring-2 focus:ring-teal-300">
-                </input>
-            </div>
-            <div>
-                <label className="text-sm">Phone Number</label>
-                <input type="tel" placeholder="Phone Number"
-                       className="ring-1 ring-gray-300 w-full rounded-md px-4 py-2 mt-2 outline-none
-                                               focus:ring-2 focus:ring-teal-300">
-                </input>
-            </div>
-            <div>
-                <label className="text-sm">ZIP code</label>
-                <input type="text" placeholder="ZIP code"
-                       className="ring-1 ring-gray-300 w-full rounded-md px-4 py-2 mt-2 outline-none
-                                               focus:ring-2 focus:ring-teal-300">
-                </input>
-            </div>
-            <div>
-                <label className="text-sm">New Password</label>
-                <input type="password" placeholder="New Password"
-                       className="ring-1 ring-gray-300 w-full rounded-md px-4 py-2 mt-2 outline-none
-                                               focus:ring-2 focus:ring-teal-300">
-                </input>
-            </div>
+const ProfileForm: React.FC<ProfileFormProps> = ({ setUser }) => {
+  const formRef = useRef<HTMLFormElement>(null)
+  const [profileState, setProfileState] = useState(Object.fromEntries(profileFields.map(field => [field.id, ''])))
 
-            <div className="flex flex-row items-center justify-between">
-                <input
-                    type="reset"
-                    className="inline-block cursor-pointer bg-cyan-700 text-white font-bold rounded-lg w-28 h-10 uppercase text-sm">
-                </input>
-                <input
-                    type="submit"
-                    className="inline-block cursor-pointer bg-pink-400 text-white font-bold rounded-lg w-28 h-10 uppercase text-sm">
-                </input>
-            </div>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => setProfileState({
+    ...profileState,
+    [e.target.id]: e.target.value
+  })
 
-        </form>
-    );
-};
+  const handleReset = (): void => {
+    setProfileState(Object.fromEntries(profileFields.map(field => [field.id, ''])))
+  }
 
-export default ProfileForm;
+  const handleSubmit = (e: React.SyntheticEvent): void => {
+    e.preventDefault()
+    setUser(prev => ({ ...prev, ...profileState }))
+    handleReset()
+  }
+
+  return (
+    <form className="flex flex-col space-y-4" ref={formRef} onReset={handleReset} onSubmit={handleSubmit}>
+      {
+        profileFields.map(({
+          labelText,
+          labelFor,
+          id,
+          name,
+          type,
+          isRequired,
+          placeholder,
+          pattern
+        }) =>
+          <FormEntry
+            key={id}
+            handleChange={handleChange}
+            value={profileState[id]}
+            labelText={labelText}
+            labelFor={labelFor}
+            id={id}
+            name={name}
+            type={type}
+            isRequired={isRequired}
+            placeholder={placeholder}
+            showLabel={true}
+            pattern={pattern}/>)
+      }
+
+      <div className="flex flex-row items-center justify-between">
+        <input type="reset" id="reset" value="Reset"
+               className="cursor-pointer bg-cyan-700 text-white font-bold p-2 rounded-md w-28 outline-none hover:bg-cyan-300">
+        </input>
+        <input type="submit" id="submit" value="Submit"
+               className="cursor-pointer bg-pink-400 text-white font-bold p-2 rounded-md w-28 outline-none hover:bg-pink-300">
+        </input>
+      </div>
+
+    </form>
+  )
+}
+
+export default ProfileForm
