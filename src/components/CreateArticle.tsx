@@ -31,7 +31,7 @@ const CreateArticle: React.FC<CreatePinProps> = ({ user, setPins, setLoading }) 
       setPins(prev => [post, ...prev])
       clear()
       setLoading(false)
-    }).catch(e => console.error(e.msg))
+    }).catch(e => console.error(e))
   }
 
   const clear = (): void => {

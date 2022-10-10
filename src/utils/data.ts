@@ -1,5 +1,6 @@
 import { Post, User, UserInfo } from '../constants/types'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 
 const USERS = 'https://jsonplaceholder.typicode.com/users'
 const USER_POSTS = 'https://jsonplaceholder.typicode.com/posts'
@@ -96,7 +97,7 @@ export const CreateUser = async (username: string, email: string): Promise<User>
     username,
     email
   })
-  const uuid = crypto.randomUUID()
+  const uuid = uuidv4()
   return {
     ...defaultUser, ...data, id: uuid, avatar: getUserImageUrlByUUID(uuid, 150)
   }

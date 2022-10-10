@@ -1,3 +1,9 @@
+# Project Info
+- netid: yw118
+- url: http://social-feeds.surge.sh/
+- example:
+![screenshot](screenshot.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

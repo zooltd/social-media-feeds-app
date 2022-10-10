@@ -23,7 +23,7 @@ const Main: React.FC<MainProps> = ({ user, followingUserIds }) => {
       .then(posts => {
         setPins(posts)
         setLoading(false)
-      }).catch(e => console.log(e.msg))
+      }).catch(e => console.error(e))
   }, [followingUserIds]
   )
 

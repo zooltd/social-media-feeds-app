@@ -24,9 +24,7 @@ const LoginForm: React.FC = () => {
       } else {
         setLoginErr('Login Authentication Failed!')
       }
-    }).catch(e =>
-      setLoginErr(e.msg)
-    )
+    }).catch(e =>setLoginErr(e))
   }
 
   return (

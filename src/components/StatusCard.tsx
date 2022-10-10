@@ -31,7 +31,7 @@ const StatusCard: React.FC<StatusCard2Props> = ({ userId, setFollowingUserIds, i
   }
 
   useEffect(() => {
-    getUserByUserId(userId).then(user => setUser(user)).catch(e => console.log(e.msg))
+    getUserByUserId(userId).then(user => setUser(user)).catch(e => console.error(e))
   }, [userId])
 
   return (

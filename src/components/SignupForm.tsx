@@ -28,7 +28,7 @@ const SignupForm: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(userInfo))
       localStorage.setItem(user.id, JSON.stringify(userInfo))
       navigate('/', { replace: true })
-    }).catch(e => console.error(e.msg))
+    }).catch(e => console.error(e))
   }
 
   return (

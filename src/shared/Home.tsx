@@ -23,7 +23,7 @@ const Home: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    getFollowingUserIds(user.id).then(ids => setFollowingUserIds(ids)).catch(e => console.error(e.msg))
+    getFollowingUserIds(user.id).then(ids => setFollowingUserIds(ids)).catch(e => console.error(e))
   }, [user])
 
   return (

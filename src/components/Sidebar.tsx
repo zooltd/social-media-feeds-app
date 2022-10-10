@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, closeToggle, followingUserIds, 
     CreateUser(username, 'Unknown Email').then(user => {
       setFollowingUserIds(prev => [user.id, ...prev])
       localStorage.setItem(user.id, JSON.stringify(user))
-    }).catch(e => console.error(e.msg))
+    }).catch(e => console.error(e))
   }
 
   return (
