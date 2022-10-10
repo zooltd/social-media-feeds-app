@@ -18,7 +18,7 @@ const Main: React.FC<MainProps> = ({ user, followingUserIds }) => {
 
   useEffect(() => {
     setLoading(true)
-    getPostsByUserIds(followingUserIds)
+    getPostsByUserIds([user.id, ...followingUserIds])
       .then(posts => posts.sort((lhs, rhs) => rhs.timestamp - lhs.timestamp))
       .then(posts => {
         setPins(posts)

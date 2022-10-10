@@ -24,8 +24,9 @@ const SignupForm: React.FC = () => {
     }
 
     CreateUser(signupState.username, signupState.email).then(user => {
-      localStorage.setItem('user', JSON.stringify(user))
-      localStorage.setItem(user.id, JSON.stringify(user))
+      const userInfo = { ...user, ...signupState }
+      localStorage.setItem('user', JSON.stringify(userInfo))
+      localStorage.setItem(user.id, JSON.stringify(userInfo))
       navigate('/', { replace: true })
     }).catch(e => console.error(e.msg))
   }
@@ -48,7 +49,8 @@ const SignupForm: React.FC = () => {
                 type={field.type}
                 isRequired={field.isRequired}
                 placeholder={field.placeholder}
-                showLabel={false}/>
+                showLabel={false}
+                pattern={field.pattern}/>
             )
           }
         </div>
